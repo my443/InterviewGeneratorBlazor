@@ -1,0 +1,65 @@
+﻿@page "/categories"
+@using InterviewGeneratorBlazor.ViewModels
+@inject CategoryViewModel ViewModel
+@rendermode InteractiveServer
+
+<h3>Category Listing</h3>
+
+<h3>@(ViewModel.IsEditMode ? "Edit Category" : "Add Category")</h3>
+<div class="mb-3">
+    <label>Name:</label>
+    <input class="form-control" @bind="ViewModel.CategoryModel.Name" />
+</div>
+<div class="mb-3">
+    <label>Description:</label>
+    <textarea class="form-control" @bind="ViewModel.CategoryModel.Description"></textarea>
+</div>
+@if (!string.IsNullOrEmpty(ViewModel.ErrorMessage))
+{
+    <div class="text-danger">@ViewModel.ErrorMessage</div>
+}
+<button class="btn btn-primary" @onclick="ViewModel.SaveCategory">
+    @(ViewModel.IsEditMode ? "Update" : "Add")
+</button>
+@if (ViewModel.IsEditMode)
+{
+    <button class="btn btn-secondary ms-2" @onclick="ViewModel.ResetForm">Cancel</button>
+}
+
+<hr />
+
+@if (ViewModel.Categories.Count == 0)
+{
+    <div>No categories found.</div>
+}
+else
+{
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cat in ViewModel.Categories)
+            {
+                <tr>
+                    <td>@cat.Id</td>
+                    <td>@cat.Name</td>
+                    <td>@cat.Description</td>
+                    <td>
+                        <button class="btn btn-sm btn-info me-2" @onclick="() => ViewModel.EditCategory(cat)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => ViewModel.DeleteCategory(cat.Id)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+
+}
