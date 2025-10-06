@@ -13,7 +13,6 @@ builder.Services.AddRazorComponents()
 var connectionString = "Data Source=c:\\temp\\app.db";
 builder.Services.AddSingleton(new AppDbContextFactory(connectionString));
 builder.Services.AddScoped<CategoryViewModel>();
-builder.Services.AddScoped<QuestionViewModel>();
 
 var app = builder.Build();
 

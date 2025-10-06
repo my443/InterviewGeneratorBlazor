@@ -1,12 +1,15 @@
 ﻿@page "/questions/{CategoryId:int}"
 @using InterviewGeneratorBlazor.Models
 @using InterviewGeneratorBlazor.ViewModels
-@inject QuestionViewModel ViewModel
+@using InterviewGeneratorBlazor.Data
+
+@inject AppDbContextFactory ContextFactory
+
 @rendermode InteractiveServer
 
 <h3>Questions</h3>
 
-@if (Category == null)
+@if (ViewModel.Category == null)
 {
     <p>Category not found.</p>
 }
@@ -16,7 +19,7 @@ else if (ViewModel == null)
 }
 else
 {
-    <h3>Questions for @Category.Name</h3>
+    <h3>Questions for @ViewModel.Category.Name</h3>
 
     @if (!string.IsNullOrEmpty(ViewModel.ErrorMessage))
     {
@@ -51,4 +54,22 @@ else
             </li>
         }
     </ul>
+}
+
+@code {
+    [Parameter]
+    public int CategoryId { get; set; }
+
+    private Category? Category;
+    private QuestionViewModel? ViewModel;
+
+    protected override void OnInitialized()
+    {
+        using var db = ContextFactory.CreateDbContext();
+        Category = db.Categories.FirstOrDefault(c => c.Id == CategoryId);
+        if (Category != null)
+        {
+            ViewModel = new QuestionViewModel(ContextFactory, CategoryId);
+        }
+    }
 }

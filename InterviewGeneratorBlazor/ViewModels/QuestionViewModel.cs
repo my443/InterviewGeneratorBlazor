@@ -19,6 +19,7 @@ namespace InterviewGeneratorBlazor.ViewModels
         public Question QuestionModel { get; set; } = new();
         public bool IsEditMode { get; set; } = false;
         public string? ErrorMessage { get; set; }
+        public Category Category { get; set; }
 
         public void LoadQuestions()
         {
@@ -26,6 +27,8 @@ namespace InterviewGeneratorBlazor.ViewModels
             Questions = db.Questions
                 .Where(q => q.CategoryId == _categoryId)
                 .ToList();
+
+            Category = db.Categories.Find(_categoryId) ?? new Category();
         }
 
         public void EditQuestion(Question question)
