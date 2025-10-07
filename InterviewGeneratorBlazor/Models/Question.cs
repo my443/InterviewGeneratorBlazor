@@ -13,5 +13,6 @@ namespace InterviewGeneratorBlazor.Models
         public string Answer { get; set; } = string.Empty;
         public int CategoryId { get; set; }
         public Category Category { get; set; }  // Cannot be null - Every question must belong to a category
+        public List<Interview> Interviews { get; set; } = new List<Interview>();
     }
 }
