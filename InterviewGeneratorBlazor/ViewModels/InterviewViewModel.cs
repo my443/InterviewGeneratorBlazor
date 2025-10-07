@@ -13,7 +13,9 @@ namespace InterviewGeneratorBlazor.ViewModels
         public List<Category> Categories { get; set; } = new();
         public List<Question> AvailableQuestions { get; set; } = new();
         public List<Question> InterviewQuestions { get; set; } = new();
+        public List<Interview> Interviews { get; set; } = new();
 
+        public string? ErrorMessage { get; set; }
         public int? SelectedCategoryId { get; set; }
         public int? SelectedQuestionId { get; set; }
         public string InterviewName { get; set; } = string.Empty;
@@ -23,6 +25,7 @@ namespace InterviewGeneratorBlazor.ViewModels
         {
             _contextFactory = contextFactory;
             LoadCategories();
+            LoadInterviews();
         }
 
         public void LoadCategories()
@@ -86,6 +89,33 @@ namespace InterviewGeneratorBlazor.ViewModels
                 InterviewDate = interview.DateCreated;
                 InterviewQuestions = interview.Questions.ToList();
                 // Optionally, set other properties as needed
+            }
+        }
+        public void LoadInterviews()
+        {
+            using var db = _contextFactory.CreateDbContext();
+            Interviews = db.Interviews
+                .Include(i => i.Questions)
+                .OrderByDescending(i => i.DateCreated)
+                .ToList();
+        }
+
+        public void DeleteInterview(int id)
+        {
+            try
+            {
+                using var db = _contextFactory.CreateDbContext();
+                var interview = db.Interviews.Find(id);
+                if (interview != null)
+                {
+                    db.Interviews.Remove(interview);
+                    db.SaveChanges();
+                    LoadInterviews();
+                }
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = $"Error deleting interview: {ex.Message}";
             }
         }
     }

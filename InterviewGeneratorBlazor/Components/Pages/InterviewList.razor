@@ -1,0 +1,85 @@
+﻿@page "/interview/list"
+@using InterviewGeneratorBlazor.ViewModels
+@using InterviewGeneratorBlazor.Models
+@inject InterviewViewModel ViewModel
+@inject NavigationManager Navigation
+@rendermode InteractiveServer
+
+<h3>Interview Listing</h3>
+
+<div class="mb-3">
+    <button class="btn btn-success" @onclick="AddNewInterview">
+        <i class="bi bi-plus-circle"></i> Add New Interview
+    </button>
+</div>
+
+@if (!string.IsNullOrEmpty(ViewModel.ErrorMessage))
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @ViewModel.ErrorMessage
+        <button type="button" class="btn-close" @onclick="() => ViewModel.ErrorMessage = null"></button>
+    </div>
+}
+
+<hr />
+
+@if (ViewModel.Interviews.Count == 0)
+{
+    <div class="alert alert-info">No interviews found. Click "Add New Interview" to create one.</div>
+}
+else
+{
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>Id</th>
+                <th>Interview Name</th>
+                <th>Date Created</th>
+                <th>Status</th>
+                <th>Questions</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var interview in ViewModel.Interviews)
+            {
+                <tr>
+                    <td>@interview.Id</td>
+                    <td>@interview.InterviewName</td>
+                    <td>@interview.DateCreated.ToString("MMM dd, yyyy hh:mm tt")</td>
+                    <td>
+                        @if (interview.IsActive)
+                        {
+                            <span class="badge bg-success">Active</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Inactive</span>
+                        }
+                    </td>
+                    <td>@interview.Questions.Count</td>
+                    <td>
+                        <NavLink class="btn btn-sm btn-info me-2" href="@($"/interview/{interview.Id}")">
+                            <i class="bi bi-pencil"></i> Edit
+                        </NavLink>
+                        <button class="btn btn-sm btn-danger" @onclick="() => DeleteInterviewWithConfirm(interview)">
+                            <i class="bi bi-trash"></i> Delete
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private void AddNewInterview()
+    {
+        Navigation.NavigateTo("/interview");
+    }
+
+    private async Task DeleteInterviewWithConfirm(Interview interview)
+    {
+        ViewModel.DeleteInterview(interview.Id);
+    }
+}
