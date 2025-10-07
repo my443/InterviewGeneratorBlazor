@@ -1,4 +1,5 @@
 @page "/interview"
+@page "/interview/{InterviewId:int}"
 @using InterviewGeneratorBlazor.Models
 @using InterviewGeneratorBlazor.ViewModels
 @using InterviewGeneratorBlazor.Data
@@ -8,11 +9,18 @@
 @rendermode InteractiveServer
 
 @code {
+    [Parameter]
+    public int? InterviewId { get; set; }
+
     private InterviewViewModel ViewModel;
 
     protected override void OnInitialized()
     {
         ViewModel = new InterviewViewModel(ContextFactory);
+        if (InterviewId.HasValue)
+        {
+            ViewModel.LoadInterviewById(InterviewId.Value);
+		}
     }
 
     private void OnCategoryChanged(ChangeEventArgs e)

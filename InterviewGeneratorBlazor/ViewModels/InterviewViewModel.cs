@@ -1,5 +1,6 @@
-using InterviewGeneratorBlazor.Models;
 using InterviewGeneratorBlazor.Data;
+using InterviewGeneratorBlazor.Models;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -71,6 +72,21 @@ namespace InterviewGeneratorBlazor.ViewModels
 
             db.Interviews.Add(interview);
             db.SaveChanges();
+        }
+        public void LoadInterviewById(int interviewId)
+        {
+            using var context = _contextFactory.CreateDbContext();
+            var interview = context.Interviews
+                .Include(i => i.Questions)
+                .FirstOrDefault(i => i.Id == interviewId);
+
+            if (interview != null)
+            {
+                InterviewName = interview.InterviewName;
+                InterviewDate = interview.DateCreated;
+                InterviewQuestions = interview.Questions.ToList();
+                // Optionally, set other properties as needed
+            }
         }
     }
 }
