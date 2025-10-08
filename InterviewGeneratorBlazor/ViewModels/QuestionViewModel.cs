@@ -8,27 +8,33 @@ namespace InterviewGeneratorBlazor.ViewModels
         private readonly AppDbContextFactory _contextFactory;
         private readonly int _categoryId;
 
-        public QuestionViewModel(AppDbContextFactory contextFactory, int categoryId)
-        {
-            _contextFactory = contextFactory;
-            _categoryId = categoryId;
-            LoadQuestions();
-        }
-
         public List<Question> Questions { get; set; } = new();
         public Question QuestionModel { get; set; } = new();
         public bool IsEditMode { get; set; } = false;
         public string? ErrorMessage { get; set; }
         public Category Category { get; set; }
+        public List<Category> Categories { get; set; } = new(); 
 
+        public QuestionViewModel(AppDbContextFactory contextFactory, int categoryId)
+        {
+            _contextFactory = contextFactory;
+            _categoryId = categoryId;
+            LoadCategories();
+            LoadQuestions();
+        }
         public void LoadQuestions()
         {
             using var db = _contextFactory.CreateDbContext();
             Questions = db.Questions
                 .Where(q => q.CategoryId == _categoryId)
                 .ToList();
+        }
 
+        public void LoadCategories()
+        {
+            using var db = _contextFactory.CreateDbContext();
             Category = db.Categories.Find(_categoryId) ?? new Category();
+            Categories = db.Categories.ToList();
         }
 
         public void EditQuestion(Question question)

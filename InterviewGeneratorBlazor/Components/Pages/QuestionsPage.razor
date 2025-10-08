@@ -9,17 +9,33 @@
 
 <h3>Questions</h3>
 <NavLink class="btn btn-sm btn-primary" href="@($"/categories")">Categories</NavLink>
-@if (ViewModel.Category == null)
+@if (ViewModel.Categories == null)
 {
-    <p>Category not found.</p>
+    <p>Loading categories...</p>
 }
 else if (ViewModel == null)
 {
     <p>Loading...</p>
 }
+else if (ViewModel.Category == null)
+{
+    <p>Category not found.</p>
+}
 else
 {
+    <div class="mb-3">
+        <label for="categorySelect" class="form-label">Select Category</label>
+        <select id="categorySelect" class="form-select"  value="@ViewModel.Category.Id">
+            @foreach (var cat in ViewModel.Categories)
+            {
+                <option value="@cat.Id" selected="@(cat.Id == ViewModel.Category.Id)">
+                    @cat.Name
+                </option>
+            }
+        </select>
+    </div>
     <h3>Questions for @ViewModel.Category.Name</h3>
+
 
     @if (!string.IsNullOrEmpty(ViewModel.ErrorMessage))
     {
