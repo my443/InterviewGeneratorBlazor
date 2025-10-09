@@ -12,7 +12,9 @@ builder.Services.AddRazorComponents()
 // RegisterViewModels
 var connectionString = "Data Source=c:\\temp\\app.db";
 builder.Services.AddSingleton(new AppDbContextFactory(connectionString));
+
 builder.Services.AddScoped<CategoryViewModel>();
+builder.Services.AddScoped<QuestionViewModel>();
 builder.Services.AddTransient<InterviewViewModel>();
 
 var app = builder.Build();

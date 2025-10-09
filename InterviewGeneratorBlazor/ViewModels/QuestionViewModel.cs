@@ -6,19 +6,31 @@ namespace InterviewGeneratorBlazor.ViewModels
     public class QuestionViewModel
     {
         private readonly AppDbContextFactory _contextFactory;
-        private readonly int _categoryId;
+        private int _categoryId;
 
         public List<Question> Questions { get; set; } = new();
         public Question QuestionModel { get; set; } = new();
         public bool IsEditMode { get; set; } = false;
         public string? ErrorMessage { get; set; }
+        public List<Category> Categories { get; set; } = new();
         public Category Category { get; set; }
-        public List<Category> Categories { get; set; } = new(); 
+        public int CategoryId 
+        { 
+            get => _categoryId; 
+            set 
+            { 
+                if (_categoryId != value) 
+                { 
+                    ChangeCategory(value); 
+                } 
+            }
+        }
 
-        public QuestionViewModel(AppDbContextFactory contextFactory, int categoryId)
+
+        public QuestionViewModel(AppDbContextFactory contextFactory)
         {
             _contextFactory = contextFactory;
-            _categoryId = categoryId;
+            //_categoryId = categoryId;
             LoadCategories();
             LoadQuestions();
         }
@@ -111,6 +123,15 @@ namespace InterviewGeneratorBlazor.ViewModels
             QuestionModel = new Question { CategoryId = _categoryId };
             IsEditMode = false;
             ErrorMessage = null;
+        }
+
+        public void ChangeCategory(int categoryId)
+        {
+            _categoryId = categoryId;
+            LoadCategories();
+            LoadQuestions();
+            Category = Categories.FirstOrDefault(c => c.Id == _categoryId);
+            ResetForm();
         }
     }
 }

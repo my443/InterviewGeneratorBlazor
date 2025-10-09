@@ -1,6 +1,9 @@
 ﻿@page "/categories"
 @using InterviewGeneratorBlazor.ViewModels
 @inject CategoryViewModel ViewModel
+@inject QuestionViewModel QuestionViewModel
+@inject NavigationManager Navigation
+
 @rendermode InteractiveServer
 
 <h3>Category Listing</h3>
@@ -53,7 +56,7 @@ else
                     <td>
                         <button class="btn btn-sm btn-info me-2" @onclick="() => ViewModel.EditCategory(cat)">Edit</button>
                         <button class="btn btn-sm btn-danger" @onclick="() => ViewModel.DeleteCategory(cat.Id)">Delete</button>
-                        <NavLink class="btn btn-sm btn-primary" href="@($"/questions/{cat.Id}")">
+                        <NavLink class="btn btn-sm btn-primary" @onclick="() => GoToQuestions(cat.Id)" >
                             Questions
                         </NavLink>
                     </td>
@@ -64,5 +67,11 @@ else
 }
 
 @code {
+
+    public void GoToQuestions(int categoryId)
+    {
+        QuestionViewModel.ChangeCategory(categoryId);
+        Navigation.NavigateTo($"/questions");
+    }       
 
 }

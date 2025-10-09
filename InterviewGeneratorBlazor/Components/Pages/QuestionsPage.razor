@@ -1,10 +1,10 @@
-﻿@page "/questions/{CategoryId:int}"
+﻿@page "/questions"
 @using InterviewGeneratorBlazor.Models
 @using InterviewGeneratorBlazor.ViewModels
 @using InterviewGeneratorBlazor.Data
 
 @inject AppDbContextFactory ContextFactory
-@inject NavigationManager NavigationManager
+@inject QuestionViewModel ViewModel
 
 @rendermode InteractiveServer
 
@@ -74,19 +74,19 @@ else
 }
 
 @code {
-    [Parameter]
-    public int CategoryId { get; set; }
+
 
     private Category? Category;
-    private QuestionViewModel? ViewModel;
+    // private QuestionViewModel? ViewModel;
 
     protected override void OnInitialized()
     {
         using var db = ContextFactory.CreateDbContext();
-        Category = db.Categories.FirstOrDefault(c => c.Id == CategoryId);
+        Category = db.Categories.FirstOrDefault(c => c.Id == ViewModel.CategoryId);
+        
         if (Category != null)
         {
-            ViewModel = new QuestionViewModel(ContextFactory, CategoryId);
+            ViewModel.ChangeCategory(ViewModel.CategoryId);
         }
     }
 
@@ -94,9 +94,8 @@ else
     {
         if (int.TryParse(e.Value?.ToString(), out int newCategoryId) && newCategoryId != ViewModel?.Category.Id)
         {
-            // Navigate to the new category (reloads the page with new CategoryId)
-            var uri = $"/questions/{newCategoryId}";
-            NavigationManager.NavigateTo(uri);
+            ViewModel.ChangeCategory(newCategoryId);
+            StateHasChanged();
         }
     }
 }
