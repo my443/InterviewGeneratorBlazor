@@ -1,5 +1,6 @@
 @* Reusable horizontal navigation buttons *@
-<div class="d-flex gap-2 my-3">
+@* Responsive navigation: horizontal on large screens, dropdown on small screens *@
+<div class="d-none d-md-flex gap-2 my-3">
     <NavLink class="btn btn-primary" href="" Match="NavLinkMatch.All">
         <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
     </NavLink>
@@ -12,4 +13,34 @@
     <NavLink class="btn btn-primary" href="interview/list">
         <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Interview List
     </NavLink>
+</div>
+
+<div class="d-flex d-md-none my-3">
+    <div class="dropdown w-100">
+        <button class="btn btn-primary dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Menu
+        </button>
+        <ul class="dropdown-menu w-100">
+            <li>
+                <NavLink class="dropdown-item" href="" Match="NavLinkMatch.All">
+                    <span class="bi bi-house-door-fill-nav-menu" aria-hidden="true"></span> Home
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="dropdown-item" href="categories">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Categories
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="dropdown-item" href="questions">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Questions
+                </NavLink>
+            </li>
+            <li>
+                <NavLink class="dropdown-item" href="interview/list">
+                    <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Interview List
+                </NavLink>
+            </li>
+        </ul>
+    </div>
 </div>
