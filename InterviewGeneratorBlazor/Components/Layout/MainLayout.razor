@@ -1,13 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@using InterviewGeneratorBlazor.Components.Shared
 
 <div class="page">
-    <div class="sidebar">
+    @* <div class="sidebar">
         <NavMenu />
-    </div>
+    </div> *@
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+        <div class="top-row px-4 d-flex justify-content-between align-items-center">
+            <span class="navbar-brand mb-0 h1">Interview Generator</span>
+            <NavButtons />
         </div>
 
         <article class="content px-4">
